@@ -35,6 +35,7 @@ our proto PaLMGenerateText($prompt is copy,
                            Numeric :$top-p = 1,
                            :$top-k is copy = Whatever,
                            UInt :n(:$candidate-count) = 1,
+                           :$safety-settings = Whatever,
                            :$stop-sequence = Whatever,
                            :$auth-key is copy = Whatever,
                            UInt :$timeout= 10,
@@ -54,6 +55,7 @@ multi sub PaLMGenerateText($prompt is copy,
                            Numeric :$top-p = 1,
                            :$top-k is copy = Whatever,
                            UInt :n(:$candidate-count) = 1,
+                           :$safety-settings = Whatever,
                            :$stop-sequence = Whatever,
                            :$auth-key is copy = Whatever,
                            UInt :$timeout= 10,
@@ -109,6 +111,14 @@ multi sub PaLMGenerateText($prompt is copy,
     unless 0 < $candidate-count ≤ 8;
 
     #------------------------------------------------------
+    # Process $safety-settings
+    #------------------------------------------------------
+    if !$safety-settings.isa(Whatever) {
+        die "The argument \$safety-settings is (hash-)map or Whatever."
+        unless $safety-settings ~~ Map;
+    }
+
+    #------------------------------------------------------
     # Process $stop-sequence
     #------------------------------------------------------
     if !$stop-sequence.isa(Whatever) {
@@ -124,6 +134,7 @@ multi sub PaLMGenerateText($prompt is copy,
                topP => $top-p, candidateCount => $candidate-count;
 
     if !$stop-sequence.isa(Whatever) { %body<stopSequence> = $stop-sequence; }
+    if !$safety-settings.isa(Whatever) { %body<safetySettings> = $safety-settings; }
     if !$top-k.isa(Whatever) { %body<topK> = $top-k; }
 
     my $url = "https://generativelanguage.googleapis.com/v1beta2/models/{$model}:generateText";
