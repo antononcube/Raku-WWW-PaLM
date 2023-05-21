@@ -22,12 +22,12 @@ use WWW::PaLM::Models;
 
 #===========================================================
 #| PaLM chat and text completions access.
-our proto palm-chat-generation(|) is export {*}
+our proto palm-generation(|) is export {*}
 
-multi sub palm-chat-generation($prompt,
-                               :$type is copy = Whatever,
-                               :$model is copy = Whatever,
-                               *%args) {
+multi sub palm-generation($prompt,
+                          :$type is copy = Whatever,
+                          :$model is copy = Whatever,
+                          *%args) {
 
     #------------------------------------------------------
     # Process $type
@@ -51,9 +51,9 @@ multi sub palm-chat-generation($prompt,
     unless $model ∈ palm-known-models;
 
     if $type eq 'chat' {
-        return WWW::PaLM::ChatCompletions::PaLMGenerateMessage($prompt, :$model, |%args);
+        return WWW::PaLM::GenerateMessage::PaLMGenerateMessage($prompt, :$model, |%args);
     } else {
-        return WWW::PaLM::TextCompletions::PaLMGenerateText($prompt, :$model, |%args);
+        return WWW::PaLM::GenerateText::PaLMGenerateText($prompt, :$model, |%args);
     }
 }
 
@@ -119,34 +119,34 @@ multi sub palm-generate-text(**@args, *%args) {
 #============================================================
 
 #| PaLM maker-suite access.
-our proto palm-maker-suite($text is copy = '',
-                           Str :$path = 'generateText',
-                           :$auth-key is copy = Whatever,
-                           UInt :$timeout= 10,
-                           :$format is copy = Whatever,
-                           Str :$method = 'tiny',
-                           *%args
-                           ) is export {*}
+our proto palm-prompt($text is copy = '',
+                      Str :$path = 'generateText',
+                      :$auth-key is copy = Whatever,
+                      UInt :$timeout= 10,
+                      :$format is copy = Whatever,
+                      Str :$method = 'tiny',
+                      *%args
+                      ) is export {*}
 
 #| PaLM maker-suite access.
-multi sub palm-maker-suite(*%args) {
-    return palm-maker-suite('', |%args);
+multi sub palm-prompt(*%args) {
+    return palm-prompt('', |%args);
 }
 
 #| PaLM maker-suite access.
-multi sub palm-maker-suite(@texts, *%args) {
-    return @texts.map({ palm-maker-suite($_, |%args) });
+multi sub palm-prompt(@texts, *%args) {
+    return @texts.map({ palm-prompt($_, |%args) });
 }
 
 #| PaLM maker-suite access.
-multi sub palm-maker-suite($text is copy,
-                           Str :$path = 'generateText',
-                           :$auth-key is copy = Whatever,
-                           UInt :$timeout= 10,
-                           :$format is copy = Whatever,
-                           Str :$method = 'tiny',
-                           *%args
-                           ) {
+multi sub palm-prompt($text is copy,
+                      Str :$path = 'generateText',
+                      :$auth-key is copy = Whatever,
+                      UInt :$timeout= 10,
+                      :$format is copy = Whatever,
+                      Str :$method = 'tiny',
+                      *%args
+                      ) {
 
     #------------------------------------------------------
     # Dispatch
@@ -160,7 +160,7 @@ multi sub palm-maker-suite($text is copy,
         when $_ ∈ <message generateMessage message-generation> {
             # my $url = 'https://generativelanguage.googleapis.com/v1beta2/{model=models/*}:generateMessage';
             my $expectedKeys = <model prompt temperature top-p top-k n candidate-count>;
-            return palm-generate-message($text, type => 'chat',
+            return palm-generate-message($text,
                     |%args.grep({ $_.key ∈ $expectedKeys }).Hash,
                     :$auth-key, :$timeout, :$format, :$method);
         }
