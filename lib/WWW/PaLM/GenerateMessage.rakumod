@@ -74,7 +74,7 @@ multi sub PaLMGenerateMessage($prompt is copy,
     # Process $temperature
     #------------------------------------------------------
     if $temperature.isa(Whatever) { $temperature = 0.35; }
-    die "The argument \$temperature is expected to be Whatever or number between 0 and 2."
+    die "The argument \$temperature is expected to be Whatever or number between 0 and 1."
     unless $temperature ~~ Numeric && 0 ≤ $temperature ≤ 1;
 
     #------------------------------------------------------

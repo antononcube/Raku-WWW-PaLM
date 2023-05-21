@@ -152,21 +152,21 @@ multi sub palm-maker-suite($text is copy,
     # Dispatch
     #------------------------------------------------------
 
-    given $path.lc {
+    given $path {
         when $_ eq 'models' {
             # my $url = 'https://generativelanguage.googleapis.com/v1beta2/models';
             return palm-models(:$auth-key, :$timeout);
         }
         when $_ ∈ <message generateMessage message-generation> {
             # my $url = 'https://generativelanguage.googleapis.com/v1beta2/{model=models/*}:generateMessage';
-            my $expectedKeys = <model prompt temperature top-p top-k>;
+            my $expectedKeys = <model prompt temperature top-p top-k n candidate-count>;
             return palm-generate-message($text, type => 'chat',
-                    |%args.grep({ $_.key ∈ <n model role max-tokens temperature> }).Hash,
+                    |%args.grep({ $_.key ∈ $expectedKeys }).Hash,
                     :$auth-key, :$timeout, :$format, :$method);
         }
         when $_ ∈ <text generateText text-generation> {
             # my $url = 'https://generativelanguage.googleapis.com/v1beta2/{model=models/*}:generateText';
-            my $expectedKeys = <model prompt max-tokens max-output-tokens temperature top-p top-k candidate-count stop-sequence>;
+            my $expectedKeys = <model prompt max-tokens max-output-tokens temperature top-p top-k n candidate-count stop-sequence>;
             return palm-generate-text($text,
                     |%args.grep({ $_.key ∈ $expectedKeys }).Hash,
                     :$auth-key, :$timeout, :$format, :$method);
