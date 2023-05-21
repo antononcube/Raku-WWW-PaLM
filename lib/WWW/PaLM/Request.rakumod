@@ -190,17 +190,11 @@ multi sub palm-request(Str :$url!,
             } elsif $res<embedding> {
                 # Assuming text embedding
                 $res<embedding><value>;
-            } elsif $res<results> {
-                # Assuming moderation
-                $res<results>.map({ $_<category_scores> // $_<categories> })
             } else {
                 $res
             }
         }
-        when $_ ∈ <whatever hash raku> {
-            if $res<choices>:exists {}
-            $res<choices> // $res<data> // $res;
-        }
+        when $_ ∈ <whatever hash raku> { $res; }
         when $_ ∈ <json> { to-json($res); }
         default { $res; }
     }
