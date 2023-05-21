@@ -37,7 +37,7 @@ multi sub palm-front(Str $text,                                   #= Text to be 
     }
 
     my $res =
-            palm-maker-suite($text,
+            palm-prompt($text,
                     :$path,
                     model => $model eq 'Whatever' ?? Whatever !! $model,
                     :$max-output-tokens,
