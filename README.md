@@ -40,9 +40,9 @@ Show text generation:
 .say for palm-generate-text('what is the population in Brazil?', format => 'values', n => 3);
 ```
 ```
-# The population of Brazil is 211,768,929.
-# The population of Brazil is 211,755,692.
-# Brazil is the fifth most populous country in the world, with a population of approximately 210 million people. The country is home to a wide variety of ethnic groups, including Europeans, Africans, Asians, and Native Americans. Brazil is also a diverse country in terms of religion, with Catholicism being the most widely practiced
+# The population in Brazil is 213,317,650.
+# The population of Brazil is 212,609,039.
+# The population of Brazil is 211,018,526.
 ```
 
 
@@ -52,7 +52,7 @@ Show message generation:
 .say for palm-generate-message('Who wrote the book "Dune"?');
 ```
 ```
-# {candidates => [{author => 1, content => Frank Herbert wrote the book "Dune". It was first published in 1965 and is considered one of the greatest science fiction novels of all time. The book tells the story of Paul Atreides, a young man who is thrust into a war for control of the desert planet Arrakis. Dune is a complex and multi-layered novel that explores themes of politics, religion, and ecology. It has been adapted into a film and a television series.}], messages => [{author => 0, content => Who wrote the book "Dune"?}]}
+# {candidates => [{author => 1, content => Frank Herbert wrote the book "Dune". It was first published in 1965 and is considered a classic of science fiction literature. The book tells the story of Paul Atreides, a young man who is thrust into a war for control of the desert planet Arrakis. Dune has been adapted into several films and television series, and its popularity has only grown in recent years.}], messages => [{author => 0, content => Who wrote the book "Dune"?}]}
 ```
 
 Show text embeddings:
@@ -141,6 +141,14 @@ graph TD
 	Q --> |no|TO
 	PJ --> TO
 ```
+
+------
+
+## TODO
+
+- [ ] Implement moderations.
+- [ ] Comparison with "WWW::OpenAI", [AAp1].
+- [ ] Hook-up finding textual answers implemented in "WWW::OpenAI", [AAp1].
 
 ------
 

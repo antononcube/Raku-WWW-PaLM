@@ -112,6 +112,14 @@ graph TD
 
 ------
 
+## TODO
+
+- [ ] Implement moderations.
+- [ ] Comparison with "WWW::OpenAI", [AAp1].
+- [ ] Hook-up finding textual answers implemented in "WWW::OpenAI", [AAp1].
+
+------
+
 ## References
 
 ### Packages, platforms
