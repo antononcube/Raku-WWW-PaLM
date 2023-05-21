@@ -94,7 +94,14 @@ multi sub palm-models(*%args) {
 #our proto palm-moderation(|) is export {*}
 #
 #multi sub palm-moderation(**@args, *%args) {
-#    return WWW::PaLM::Moderations::OpenAIModeration(|@args, |%args);
+#    my %args2 = %args.grep({ $_.key != 'format'});
+#
+#    my $res = WWW::PaLM::GenerateText::PaLMGenerateText(|@args, |%args, format => 'hash');
+#
+#    $res = $res<candidates>.map({ $_<safetyRatings> }).Array;
+#
+#    #return @res.elems > 1 ?? @res !! @res[0];
+#    return $res;
 #}
 
 #===========================================================
@@ -166,7 +173,7 @@ multi sub palm-prompt($text is copy,
         }
         when $_ ∈ <text generateText text-generation> {
             # my $url = 'https://generativelanguage.googleapis.com/v1beta2/{model=models/*}:generateText';
-            my $expectedKeys = <model prompt max-tokens max-output-tokens temperature top-p top-k n candidate-count stop-sequence>;
+            my $expectedKeys = <model prompt max-tokens max-output-tokens temperature top-p top-k n candidate-count stop-sequence safety-settings>;
             return palm-generate-text($text,
                     |%args.grep({ $_.key ∈ $expectedKeys }).Hash,
                     :$auth-key, :$timeout, :$format, :$method);
