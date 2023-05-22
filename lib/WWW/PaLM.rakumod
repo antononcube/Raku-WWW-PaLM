@@ -2,7 +2,6 @@ use v6.d;
 
 use JSON::Fast;
 use HTTP::Tiny;
-use WWW::OpenAI::Request;
 
 unit module WWW::PaLM;
 
