@@ -40,15 +40,10 @@ multi sub tiny-post(Str :$url!,
 # POST Curl call
 #============================================================
 my $curlQuery = q:to/END/;
-curl https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=$PALM_API_KEY \
+curl $URL?key=$PALM_API_KEY \
     -H 'Content-Type: application/json' \
     -X POST \
-    -d '{
-        "prompt": {
-              "text": "Write a story about a magic backpack."
-              },
-        "temperature": 1.0,
-        "candidate_count": 2}'
+    -d '$BODY'
 END
 
 multi sub curl-post(Str :$url!, Str :$body!, Str :$auth-key!, UInt :$timeout = 10) {
@@ -57,7 +52,6 @@ multi sub curl-post(Str :$url!, Str :$body!, Str :$auth-key!, UInt :$timeout = 1
             .subst('$URL', $url)
             .subst('$PALM_API_KEY', $auth-key)
             .subst('$BODY', $body);
-
     my $proc = shell $textQuery, :out, :err;
 
     say $proc.err.slurp(:close);
@@ -66,7 +60,7 @@ multi sub curl-post(Str :$url!, Str :$body!, Str :$auth-key!, UInt :$timeout = 1
 }
 
 my $curlFormQuery = q:to/END/;
-curl $URL \
+curl $URL?key=$PALM_API_KEY \
   --header 'Authorization: Bearer $PALM_API_KEY' \
   --header 'Content-Type: multipart/form-data'
 END
