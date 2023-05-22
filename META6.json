@@ -1,7 +1,7 @@
 {
   "name": "WWW::PaLM",
   "description": "WWW::PaLM provides access to the PaLM (Pathways Language Model).",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "perl": "6.*",
   "authors": [
     "Anton Antonov"
