@@ -9,8 +9,7 @@
   "auth": "zef:antononcube",
   "depends": [
     "HTTP::Tiny:ver<0.2.5+>",
-    "JSON::Fast:ver<0.17+>",
-    "WWW::OpenAI:ver<0.2.3+>"
+    "JSON::Fast:ver<0.17+>"
   ],
   "build-depends": [],
   "test-depends": [],
