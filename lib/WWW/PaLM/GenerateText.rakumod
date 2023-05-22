@@ -55,7 +55,7 @@ multi sub PaLMGenerateText($prompt is copy,
                            Numeric :$top-p = 1,
                            :$top-k is copy = Whatever,
                            UInt :n(:$candidate-count) = 1,
-                           :$safety-settings = Whatever,
+                           :$safety-settings is copy = Whatever,
                            :$stop-sequence = Whatever,
                            :$auth-key is copy = Whatever,
                            UInt :$timeout= 10,
@@ -114,8 +114,12 @@ multi sub PaLMGenerateText($prompt is copy,
     # Process $safety-settings
     #------------------------------------------------------
     if !$safety-settings.isa(Whatever) {
-        die "The argument \$safety-settings is (hash-)map or Whatever."
-        unless $safety-settings ~~ Map;
+        die "The argument \$safety-settings is expected to be a map, a list maps, or Whatever."
+        unless $safety-settings ~~ Map || $safety-settings ~~ Positional && $safety-settings.all ~~ Map;
+
+        if $safety-settings ~~ Map {
+            $safety-settings = [$safety-settings, ];
+        }
     }
 
     #------------------------------------------------------
