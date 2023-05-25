@@ -40,9 +40,9 @@ Show text generation:
 .say for palm-generate-text('what is the population in Brazil?', format => 'values', n => 3);
 ```
 ```
-# The population in Brazil is 213,317,650.
-# The population of Brazil is 212,609,039.
-# The population of Brazil is 211,018,526.
+# The population in Brazil is 212,629,407.
+# The population of Brazil is 212,605,018.
+# Brazil is the most populous country in South America and the fifth most populous country in the world. The population of Brazil is estimated at 212,601,016 as of July 2020.
 ```
 
 
@@ -52,7 +52,7 @@ Show message generation:
 .say for palm-generate-message('Who wrote the book "Dune"?');
 ```
 ```
-# {candidates => [{author => 1, content => Frank Herbert wrote the book "Dune". It was first published in 1965 and is considered a classic of science fiction literature. The book tells the story of Paul Atreides, a young man who is thrust into a war for control of the desert planet Arrakis. Dune has been adapted into several films and television series, and its popularity has only grown in recent years.}], messages => [{author => 0, content => Who wrote the book "Dune"?}]}
+# {candidates => [{author => 1, content => Frank Herbert wrote the book "Dune". It was first published in 1965 and is considered one of the greatest science fiction novels of all time. The book tells the story of Paul Atreides, a young man who is thrust into a war for control of the desert planet Arrakis. Dune has been adapted into a film, a television series, and a number of video games.}], messages => [{author => 0, content => Who wrote the book "Dune"?}]}
 ```
 
 Show text embeddings:
@@ -86,7 +86,7 @@ palm-prompt --help
 ```
 ```
 # Usage:
-#   palm-prompt <text> [--path=<Str>] [-n[=UInt]] [--max-tokens|--max-output-tokens[=UInt]] [-t|--temperature[=Real]] [-m|--model=<Str>] [-a|--auth-key=<Str>] [--timeout[=UInt]] [--format=<Str>] [--method=<Str>] -- Text processing using the OpenAI API.
+#   palm-prompt <text> [--path=<Str>] [-n[=UInt]] [--max-tokens|--max-output-tokens[=UInt]] [-t|--temperature[=Real]] [-m|--model=<Str>] [-a|--auth-key=<Str>] [--timeout[=UInt]] [--format=<Str>] [--method=<Str>] -- Text processing using the PaLM API.
 #   palm-prompt [<words> ...] [--path=<Str>] [-n[=UInt]] [--max-tokens|--max-output-tokens[=UInt]] [-m|--model=<Str>] [-t|--temperature[=Real]] [-a|--auth-key=<Str>] [--timeout[=UInt]] [--format=<Str>] [--method=<Str>] -- Command given as a sequence of words.
 #   
 #     <text>                                     Text to be processed or audio file name.
