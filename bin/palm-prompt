@@ -8,7 +8,7 @@ my %*SUB-MAIN-OPTS =
         # allow named variables at any location
         ;
 
-#| Text processing using the OpenAI API.
+#| Text processing using the PaLM API.
 multi sub palm-front(Str $text,                                   #= Text to be processed.
                      Str :$path = 'generateText',                 #= Path, one of 'generateText', 'generateMessage', 'embedText', or 'models'.
                      UInt :$n = 1,                                #= Number of completions or generations.
@@ -55,7 +55,7 @@ multi sub palm-front(Str $text,                                   #= Text to be 
     }
 }
 
-#| Text processing using the OpenAI API.
+#| Text processing using the PaLM API.
 multi sub MAIN(Str $text,                                   #= Text to be processed or audio file name.
                Str :$path = 'generateText',                 #= Path, one of 'generateText', 'generateMessage', 'embedText', or 'models'.
                UInt :$n = 1,                                #= Number of completions or generations.
