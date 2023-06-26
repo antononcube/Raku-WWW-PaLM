@@ -15,7 +15,7 @@ multi sub tiny-post(Str :$url!,
                     Str :$body!,
                     Str :$auth-key!,
                     UInt :$timeout = 10) {
-    my $resp = HTTP::Tiny.post: $url ~ "?key={ %*ENV<PALM_API_KEY> }",
+    my $resp = HTTP::Tiny.post: $url ~ "?key={ %*ENV<PALM_API_KEY> // $auth-key }",
             headers => { Content-Type => "application/json" },
             content => $body;
 
@@ -30,7 +30,7 @@ multi sub tiny-post(Str :$url!,
     if $json {
         return tiny-post(:$url, body => to-json($body), :$auth-key, :$timeout);
     }
-    my $resp = HTTP::Tiny.post: $url ~ "?key={ %*ENV<PALM_API_KEY> }",
+    my $resp = HTTP::Tiny.post: $url ~ "?key={ %*ENV<PALM_API_KEY> // $auth-key}",
             content => $body;
     return $resp<content>.decode;
 }
