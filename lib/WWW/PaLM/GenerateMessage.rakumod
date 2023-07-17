@@ -39,12 +39,12 @@ our proto PaLMGenerateMessage($prompt is copy,
                               Str :$method = 'tiny') is export {*}
 
 #| PaLM completion access.
-multi sub PaLMGenerateMessage(@prompts, *%args) {
-    return @prompts.map({ PaLMGenerateMessage($_, |%args) });
+multi sub PaLMGenerateMessage(Str $message, *%args) {
+    return PaLMGenerateMessage([$message,], |%args);
 }
 
 #| PaLM completion access.
-multi sub PaLMGenerateMessage($prompt is copy,
+multi sub PaLMGenerateMessage(@messages,
                               :$model is copy = Whatever,
                               :$temperature is copy = Whatever,
                               Numeric :$top-p = 1,
@@ -54,13 +54,6 @@ multi sub PaLMGenerateMessage($prompt is copy,
                               UInt :$timeout= 10,
                               :$format is copy = Whatever,
                               Str :$method = 'tiny') {
-
-    #------------------------------------------------------
-    # Process $prompt
-    #------------------------------------------------------
-    if $prompt ~~ Str {
-        $prompt = %( messages => [%(content => $prompt)]);
-    }
 
     #------------------------------------------------------
     # Process $model
@@ -96,6 +89,19 @@ multi sub PaLMGenerateMessage($prompt is copy,
     die "The argument \$candidate-count is expected to be a positive integer."
     unless 0 < $candidate-count ≤ 8;
 
+    #------------------------------------------------------
+    # Messages
+    #------------------------------------------------------
+
+    @messages = @messages.map({
+        if $_ ~~ Pair {
+            %(author => $_.key, content => $_.value)
+        } else {
+            %(content => $_)
+        }
+    });
+
+    my $prompt = %(:@messages);
 
     #------------------------------------------------------
     # Make PaLM URL
