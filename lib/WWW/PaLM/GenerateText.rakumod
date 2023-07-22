@@ -44,7 +44,7 @@ our proto PaLMGenerateText($prompt is copy,
 
 #| PaLM completion access.
 multi sub PaLMGenerateText(@prompts, *%args) {
-    return @prompts.map({ PaLMGenerateText($_, |%args) });
+    return @prompts.map({ PaLMGenerateText($_, |%args) }).Array;
 }
 
 #| PaLM completion access.
