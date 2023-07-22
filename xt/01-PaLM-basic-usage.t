@@ -17,9 +17,16 @@ ok palm-prompt(path => 'models', :$method);
 ok palm-prompt('What is the most important word in English today?', :$method);
 
 ## 3
-ok palm-prompt('Generate Raku code for a loop over a list', path => 'generateText', model => Whatever, :$method);
+isa-ok
+        palm-prompt('What is the most important word in English today?', :$method, format => 'values'),
+        Str,
+        'string result';
 
 ## 4
-ok palm-prompt('Generate Raku code for a loop over a list', path => 'generateMessage', model => 'chat-bison-001', :$method);
+ok palm-prompt('Generate Raku code for a loop over a list', path => 'generateText', model => Whatever, :$method);
+
+## 5
+ok palm-prompt('Generate Raku code for a loop over a list', path => 'generateMessage', model => 'chat-bison-001',
+        :$method);
 
 done-testing;
