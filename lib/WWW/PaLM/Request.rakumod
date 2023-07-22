@@ -174,12 +174,11 @@ multi sub palm-request(Str :$url!,
         when $_ eq 'values' {
             if ($res<candidates>:exists) && ($res<messages>:exists) {
                 # Assuming chat completion
-                my @res2 = $res<candidates>.map({ $_<content> });
+                my @res2 = $res<candidates>.map({ $_<content> }).Array;
                 @res2.elems == 1 ?? @res2[0] !! @res2;
             } elsif $res<candidates>:exists {
-                    # Assuming chat completion
                     # Assuming text completion
-                    my @res2 = $res<candidates>.map({ $_<output> });
+                    my @res2 = $res<candidates>.map({ $_<output> }).Array;
                     @res2.elems == 1 ?? @res2[0] !! @res2;
             } elsif $res<embedding> {
                 # Assuming text embedding
