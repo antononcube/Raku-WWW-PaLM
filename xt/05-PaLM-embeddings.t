@@ -24,7 +24,7 @@ my @queries = [
         'what is a good meat and potatoes recipe'
 ];
 
-is palm-embed-text(@queries, format => "values", :$method).WHAT ∈ (Positional, Seq), True;
+is palm-embed-text(@queries, format => "values", :$method).WHAT ∈ (Array, Positional, Seq), True;
 
 ## 3
 is palm-embed-text(@queries, format => "values", :$method).elems, @queries.elems;
