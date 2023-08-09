@@ -56,7 +56,7 @@ multi sub PaLMGenerateText($prompt is copy,
                            :$top-k is copy = Whatever,
                            UInt :n(:$candidate-count) = 1,
                            :$safety-settings is copy = Whatever,
-                           :$stop-sequence = Whatever,
+                           :$stop-sequence is copy = Whatever,
                            :$auth-key is copy = Whatever,
                            UInt :$timeout= 10,
                            :$format is copy = Whatever,
@@ -128,6 +128,14 @@ multi sub PaLMGenerateText($prompt is copy,
     if !$stop-sequence.isa(Whatever) {
         die "The argument \$stop-sequence is expected to be a string, a list strings, or Whatever."
         unless $stop-sequence ~~ Str || $stop-sequence ~~ Positional && $stop-sequence.all ~~ Str;
+    }
+
+    $stop-sequence = do given $stop-sequence {
+        when Str:D { [$_, ]}
+        when Empty { Whatever }
+        when $_ ~~ Positional && $_.elems { $_ }
+        when $_ ~~ Iterable   && $_.elems { $_.Array }
+        default { Whatever }
     }
 
     #------------------------------------------------------
