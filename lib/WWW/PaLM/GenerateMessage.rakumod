@@ -30,6 +30,7 @@ END
 our proto PaLMGenerateMessage($prompt is copy,
                               :$context = Whatever,
                               :$examples = Whatever,
+                              :$author = Whatever,
                               :$model = Whatever,
                               :$temperature = Whatever,
                               Numeric :$top-p = 1,
@@ -47,8 +48,9 @@ multi sub PaLMGenerateMessage(Str $message, *%args) {
 
 #| PaLM completion access.
 multi sub PaLMGenerateMessage(@messages,
-                              :$context = Whatever,
+                              :$context is copy = Whatever,
                               :$examples is copy = Whatever,
+                              :$author is copy = Whatever,
                               :$model is copy = Whatever,
                               :$temperature is copy = Whatever,
                               Numeric :$top-p = 1,
@@ -58,6 +60,14 @@ multi sub PaLMGenerateMessage(@messages,
                               UInt :$timeout= 10,
                               :$format is copy = Whatever,
                               Str :$method = 'tiny') {
+
+    #------------------------------------------------------
+    # Process $author
+    #------------------------------------------------------
+
+    if $author.isa(Whatever) { $author = 'user'; }
+    die "The argument \$author is expected to be a string or Whatever."
+    unless $author ~~ Str:D;
 
     #------------------------------------------------------
     # Process $model
@@ -72,14 +82,14 @@ multi sub PaLMGenerateMessage(@messages,
     #------------------------------------------------------
     if $temperature.isa(Whatever) { $temperature = 0.35; }
     die "The argument \$temperature is expected to be Whatever or number between 0 and 1."
-    unless $temperature ~~ Numeric && 0 ≤ $temperature ≤ 1;
+    unless $temperature ~~ Numeric:D && 0 ≤ $temperature ≤ 1;
 
     #------------------------------------------------------
     # Process $top-p
     #------------------------------------------------------
     if $top-p.isa(Whatever) { $top-p = 1.0; }
     die "The argument \$top-p is expected to be Whatever or number between 0 and 1."
-    unless $top-p ~~ Numeric && 0 ≤ $top-p ≤ 1;
+    unless $top-p ~~ Numeric:D && 0 ≤ $top-p ≤ 1;
 
     #------------------------------------------------------
     # Process $top-k
@@ -118,13 +128,22 @@ multi sub PaLMGenerateMessage(@messages,
     # Messages
     #------------------------------------------------------
 
-    @messages = @messages.map({
-        if $_ ~~ Pair {
-            %(author => $_.key, content => $_.value)
-        } else {
-            %(content => $_)
+    @messages = @messages.map( -> $r {
+        given $r {
+            when $_ ~~ Pair && $_.key ∉ <context examples> {
+                %(author => $_.key, content => $_.value)
+            }
+            when $_ ~~ Pair && $_.key eq 'context' && $context.isa(Whatever) {
+                $context = $_.value; Empty
+            }
+            when $_ ~~ Pair && $_.key eq 'examples' && $examples.isa(Whatever) {
+                $examples = $_.value; Empty
+            }
+            default {
+                %(:$author, content => $_.Str)
+            }
         }
-    });
+    }).Array;
 
     my $prompt = %(:@messages);
 
