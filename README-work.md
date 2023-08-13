@@ -114,13 +114,33 @@ graph TD
 
 ## TODO
 
-- [ ] Implement moderations.
-- [ ] Comparison with "WWW::OpenAI", [AAp1].
-- [ ] Hook-up finding textual answers implemented in "WWW::OpenAI", [AAp1].
+- [ ] TODO Implement moderations.
+- [X] DONE Comparison with "WWW::OpenAI", [AAp1].
+  - The comparison is done via workflows with "LLM::Functions", [AAp3]
+- [X] DONE Hook-up finding textual answers implemented in "WWW::OpenAI", [AAp1].
+  - There is a dedicated package for this now -- see "ML::FindTextualAnswer", [AAp4]. 
 
 ------
 
 ## References
+
+
+### Articles
+
+[AA1] Anton Antonov,
+["Workflows with LLM functions"](https://rakuforprediction.wordpress.com/2023/08/01/workflows-with-llm-functions/),
+(2023),
+[RakuForPredictions at WordPress](https://rakuforprediction.wordpress.com).
+
+[AA2] Anton Antonov,
+["Number guessing games: PaLM vs ChatGPT"](https://rakuforprediction.wordpress.com/2023/08/06/number-guessing-games-palm-vs-chatgpt/)
+(2023),
+[RakuForPredictions at WordPress](https://rakuforprediction.wordpress.com).
+
+[ZG1] Zoubin Ghahramani,
+["Introducing PaLM 2"](https://blog.google/technology/ai/google-palm-2-ai-large-language-model/),
+(2023),
+[Google Official Blog on AI](https://blog.google/technology/ai/).
 
 ### Packages, platforms
 
@@ -134,9 +154,14 @@ graph TD
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[OAI1] OpenAI Platform, [OpenAI platform](https://platform.openai.com/).
-
-[ZG1] Zoubin Ghahramani,
-["Introducing PaLM 2"](https://blog.google/technology/ai/google-palm-2-ai-large-language-model/),
+[AAp3] Anton Antonov,
+[LLM::Functions Raku package](https://github.com/antononcube/Raku-LLM-Functions),
 (2023),
-[Google Official Blog on AI](https://blog.google/technology/ai/).
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp4] Anton Antonov,
+[ML::FindTextualAnswer Raku package](https://github.com/antononcube/Raku-ML-FindTextualAnswer),
+(2023),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[OAI1] OpenAI Platform, [OpenAI platform](https://platform.openai.com/).

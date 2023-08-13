@@ -40,9 +40,9 @@ Show text generation:
 .say for palm-generate-text('what is the population in Brazil?', format => 'values', n => 3);
 ```
 ```
-# The population in Brazil is 212,629,407.
-# The population of Brazil is 212,605,018.
-# Brazil is the most populous country in South America and the fifth most populous country in the world. The population of Brazil is estimated at 212,601,016 as of July 2020.
+# 211,768,929
+# 213,317,639
+# 212,609,039
 ```
 
 
@@ -86,19 +86,17 @@ palm-prompt --help
 ```
 ```
 # Usage:
-#   palm-prompt <text> [--path=<Str>] [-n[=UInt]] [--max-tokens|--max-output-tokens[=UInt]] [-t|--temperature[=Real]] [-m|--model=<Str>] [-a|--auth-key=<Str>] [--timeout[=UInt]] [--format=<Str>] [--method=<Str>] -- Text processing using the PaLM API.
-#   palm-prompt [<words> ...] [--path=<Str>] [-n[=UInt]] [--max-tokens|--max-output-tokens[=UInt]] [-m|--model=<Str>] [-t|--temperature[=Real]] [-a|--auth-key=<Str>] [--timeout[=UInt]] [--format=<Str>] [--method=<Str>] -- Command given as a sequence of words.
+#   palm-prompt [<words> ...] [--path=<Str>] [-n[=UInt]] [--mt|--max-output-tokens[=UInt]] [-m|--model=<Str>] [-t|--temperature[=Real]] [-a|--auth-key=<Str>] [--timeout[=UInt]] [-f|--format=<Str>] [--method=<Str>] -- Command given as a sequence of words.
 #   
-#     <text>                                     Text to be processed or audio file name.
-#     --path=<Str>                               Path, one of 'generateText', 'generateMessage', 'embedText', or 'models'. [default: 'generateText']
-#     -n[=UInt]                                  Number of completions or generations. [default: 1]
-#     --max-tokens|--max-output-tokens[=UInt]    The maximum number of tokens to generate in the completion. [default: 100]
-#     -t|--temperature[=Real]                    Temperature. [default: 0.7]
-#     -m|--model=<Str>                           Model. [default: 'Whatever']
-#     -a|--auth-key=<Str>                        Authorization key (to use PaLM API.) [default: 'Whatever']
-#     --timeout[=UInt]                           Timeout. [default: 10]
-#     --format=<Str>                             Format of the result; one of "json" or "hash". [default: 'json']
-#     --method=<Str>                             Method for the HTTP POST query; one of "tiny" or "curl". [default: 'tiny']
+#     --path=<Str>                       Path, one of 'generateText', 'generateMessage', 'embedText', or 'models'. [default: 'generateText']
+#     -n[=UInt]                          Number of completions or generations. [default: 1]
+#     --mt|--max-output-tokens[=UInt]    The maximum number of tokens to generate in the completion. [default: 100]
+#     -m|--model=<Str>                   Model. [default: 'Whatever']
+#     -t|--temperature[=Real]            Temperature. [default: 0.7]
+#     -a|--auth-key=<Str>                Authorization key (to use PaLM API.) [default: 'Whatever']
+#     --timeout[=UInt]                   Timeout. [default: 10]
+#     -f|--format=<Str>                  Format of the result; one of "json", "hash", "values", or "Whatever". [default: 'values']
+#     --method=<Str>                     Method for the HTTP POST query; one of "tiny" or "curl". [default: 'tiny']
 ```
 
 **Remark:** When the authorization key argument "auth-key" is specified set to "Whatever"
@@ -146,13 +144,33 @@ graph TD
 
 ## TODO
 
-- [ ] Implement moderations.
-- [ ] Comparison with "WWW::OpenAI", [AAp1].
-- [ ] Hook-up finding textual answers implemented in "WWW::OpenAI", [AAp1].
+- [ ] TODO Implement moderations.
+- [X] DONE Comparison with "WWW::OpenAI", [AAp1].
+  - The comparison is done via workflows with "LLM::Functions", [AAp3]
+- [X] DONE Hook-up finding textual answers implemented in "WWW::OpenAI", [AAp1].
+  - There is a dedicated package for this now -- see "ML::FindTextualAnswer", [AAp4]. 
 
 ------
 
 ## References
+
+
+### Articles
+
+[AA1] Anton Antonov,
+["Workflows with LLM functions"](https://rakuforprediction.wordpress.com/2023/08/01/workflows-with-llm-functions/),
+(2023),
+[RakuForPredictions at WordPress](https://rakuforprediction.wordpress.com).
+
+[AA2] Anton Antonov,
+["Number guessing games: PaLM vs ChatGPT"](https://rakuforprediction.wordpress.com/2023/08/06/number-guessing-games-palm-vs-chatgpt/)
+(2023),
+[RakuForPredictions at WordPress](https://rakuforprediction.wordpress.com).
+
+[ZG1] Zoubin Ghahramani,
+["Introducing PaLM 2"](https://blog.google/technology/ai/google-palm-2-ai-large-language-model/),
+(2023),
+[Google Official Blog on AI](https://blog.google/technology/ai/).
 
 ### Packages, platforms
 
@@ -166,9 +184,14 @@ graph TD
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[OAI1] OpenAI Platform, [OpenAI platform](https://platform.openai.com/).
-
-[ZG1] Zoubin Ghahramani,
-["Introducing PaLM 2"](https://blog.google/technology/ai/google-palm-2-ai-large-language-model/),
+[AAp3] Anton Antonov,
+[LLM::Functions Raku package](https://github.com/antononcube/Raku-LLM-Functions),
 (2023),
-[Google Official Blog on AI](https://blog.google/technology/ai/).
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp4] Anton Antonov,
+[ML::FindTextualAnswer Raku package](https://github.com/antononcube/Raku-ML-FindTextualAnswer),
+(2023),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[OAI1] OpenAI Platform, [OpenAI platform](https://platform.openai.com/).
