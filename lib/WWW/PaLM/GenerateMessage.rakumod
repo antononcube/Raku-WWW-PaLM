@@ -28,14 +28,16 @@ END
 
 #| PaLM completion access.
 our proto PaLMGenerateMessage($prompt is copy,
-                              :$model is copy = Whatever,
-                              :$temperature is copy = Whatever,
+                              :$context = Whatever,
+                              :$examples = Whatever,
+                              :$model = Whatever,
+                              :$temperature = Whatever,
                               Numeric :$top-p = 1,
-                              :$top-k is copy = Whatever,
+                              :$top-k = Whatever,
                               UInt :n($candidate-count) = 1,
-                              :$auth-key is copy = Whatever,
+                              :$auth-key = Whatever,
                               UInt :$timeout= 10,
-                              :$format is copy = Whatever,
+                              :$format= Whatever,
                               Str :$method = 'tiny') is export {*}
 
 #| PaLM completion access.
@@ -45,6 +47,8 @@ multi sub PaLMGenerateMessage(Str $message, *%args) {
 
 #| PaLM completion access.
 multi sub PaLMGenerateMessage(@messages,
+                              :$context = Whatever,
+                              :$examples is copy = Whatever,
                               :$model is copy = Whatever,
                               :$temperature is copy = Whatever,
                               Numeric :$top-p = 1,
@@ -90,6 +94,27 @@ multi sub PaLMGenerateMessage(@messages,
     unless 0 < $candidate-count ≤ 8;
 
     #------------------------------------------------------
+    # Process $context
+    #------------------------------------------------------
+    die "The argument \$context is expected to be a string or Whatever."
+    unless $context.isa(Whatever) || $context ~~ Str:D;
+
+    #------------------------------------------------------
+    # Process $examples
+    #------------------------------------------------------
+
+    if $examples ~~ Pair:D { $examples = [$examples,] }
+    if $examples ~~ Map:D { $examples = $examples.pairs }
+
+    die "The argument \$examples is expected to be a string-to-string Pair, a Positional of string-to-string Pairs, or Whatever."
+    unless $examples.isa(Whatever) ||
+            $examples ~~ Positional && $examples.all ~~ Pair:D;
+
+    # Instead making above this check:
+    #   ... && $examples.Hash.keys.all ~~ Str:D && $examples.Hash.values.all ~~ Str:D;
+    # we turn the Pair elements into string below.
+
+    #------------------------------------------------------
     # Messages
     #------------------------------------------------------
 
@@ -103,12 +128,20 @@ multi sub PaLMGenerateMessage(@messages,
 
     my $prompt = %(:@messages);
 
+    if $context ~~ Str:D {
+        $prompt = %(:$context, |$prompt);
+    }
+
+    if $examples ~~ Positional {
+        $examples = $examples.map({ %( input => %( content => $_.key.Str), output => %( content => $_.value.Str)) }).Array;
+        $prompt = %(:$examples, |$prompt);
+    }
+
     #------------------------------------------------------
     # Make PaLM URL
     #------------------------------------------------------
 
-    my %body = :$model, :$prompt, :$temperature,
-               topP => $top-p, candidateCount => $candidate-count;
+    my %body = :$model, :$prompt, :$temperature, topP => $top-p, candidateCount => $candidate-count;
 
     if !$top-k.isa(Whatever) { %body<topK> = $top-k; }
 
