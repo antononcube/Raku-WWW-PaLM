@@ -165,7 +165,7 @@ multi sub palm-prompt($text is copy,
         }
         when $_ ∈ <message generateMessage message-generation> {
             # my $url = 'https://generativelanguage.googleapis.com/v1beta2/{model=models/*}:generateMessage';
-            my $expectedKeys = <model prompt temperature top-p top-k n candidate-count>;
+            my $expectedKeys = <model prompt temperature top-p top-k n candidate-count context examples>;
             return palm-generate-message($text,
                     |%args.grep({ $_.key ∈ $expectedKeys }).Hash,
                     :$auth-key, :$timeout, :$format, :$method);
