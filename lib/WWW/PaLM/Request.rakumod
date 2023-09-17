@@ -128,9 +128,11 @@ multi sub palm-request(Str :$url!,
         if %*ENV<PALM_API_KEY>:exists {
             $auth-key = %*ENV<PALM_API_KEY>;
         } else {
-            note 'Cannot find PaLM authorization key. ' ~
-                    'Please provide a valid key to the argument auth-key, or set the ENV variable PALM_API_KEY.';
-            $auth-key = ''
+            # Adhering to PaLM's error result template.
+            fail %( error => %(
+                message => 'Cannot find PaLM authorization key. ' ~
+                    'Please provide a valid key to the argument auth-key, or set the ENV variable PALM_API_KEY.',
+                code => 401, status => 'NO_API_KEY'));
         }
     }
     die "The argument auth-key is expected to be a string or Whatever."
