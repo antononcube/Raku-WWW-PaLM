@@ -21,6 +21,9 @@ use WWW::PaLM::Models;
 
 #===========================================================
 #| PaLM chat and text completions access.
+#| C<:type> -- type of text generation, one of 'chat', 'text', or Whatever;
+#| C<:model> -- LLM model to use.
+#| C<*%args> -- additional arguments, see C<palm-generate-message> and C<palm-generate-text>.
 our proto palm-generation(|) is export {*}
 
 multi sub palm-generation($prompt,
@@ -58,6 +61,19 @@ multi sub palm-generation($prompt,
 
 #===========================================================
 #| PaLM chat completions access.
+#| C<$prompt> -- message to the LLM;
+#| C<:$context> -- context;
+#| C<:$examples> -- examples;
+#| C<:$author> -- author; no more two authors per chat;
+#| C<:$model> -- model;
+#| C<:$temperature> -- number between 0 and 1;
+#| C<:$top-p> -- top probability of tokens to use in the answer;
+#| C<$top-k> -- top-K top tokens to use;
+#| C<:n($candidate-count)> -- number of answers;
+#| C<:api-key($auth-key)> -- authorization key (API key);
+#| C<:$timeout> -- timeout;
+#| C<:$format> -- format to use in answers post processing, one of <values json hash asis>);
+#| C<:$method> -- method to WWW API call with, one of <curl tiny>.
 our proto palm-generate-message(|) is export {*}
 
 multi sub palm-generate-message(**@args, *%args) {
@@ -105,6 +121,18 @@ multi sub palm-models(*%args) {
 
 #===========================================================
 #| PaLM text completions access.
+#| C<$prompt> -- message to the LLM;
+#| C<:$model> -- model;
+#| C<:max-tokens(:$max-output-tokens)> -- max number of tokens of the results;
+#| C<:$temperature> -- number between 0 and 1;
+#| C<:$top-p> -- top probability of tokens to use in the answer;
+#| C<$top-k> -- top-K top tokens to use;
+#| C<:n($candidate-count)> -- number of answers;
+#| C<:$safety-settings> -- safety (or moderation) settings;
+#| C<:api-key($auth-key)> -- authorization key (API key);
+#| C<:$timeout> -- timeout;
+#| C<:$format> -- format to use in answers post processing, one of <values json hash asis>);
+#| C<:$method> -- method to WWW API call with, one of <curl tiny>.
 our proto palm-generate-text(|) is export {*}
 
 multi sub palm-generate-text(**@args, *%args) {
@@ -125,9 +153,15 @@ multi sub palm-generate-text(**@args, *%args) {
 #============================================================
 
 #| PaLM maker-suite access.
+#| C<:path> -- end point path;
+#| C<:api-key(:$auth-key)> -- authorization key (API key);
+#| C<:timeout> -- timeout
+#| C<:$format> -- format to use in answers post processing, one of <values json hash asis>);
+#| C<:$method> -- method to WWW API call with, one of <curl tiny>,
+#| C<*%args> -- additional arguments, see C<palm-generate-message> and C<palm-generate-text>.
 our proto palm-prompt($text is copy = '',
                       Str :$path = 'generateText',
-                      :$auth-key is copy = Whatever,
+                      :api-key(:$auth-key) is copy = Whatever,
                       UInt :$timeout= 10,
                       :$format is copy = Whatever,
                       Str :$method = 'tiny',
@@ -147,7 +181,7 @@ multi sub palm-prompt(@texts, *%args) {
 #| PaLM maker-suite access.
 multi sub palm-prompt($text is copy,
                       Str :$path = 'generateText',
-                      :$auth-key is copy = Whatever,
+                      :api-key(:$auth-key) is copy = Whatever,
                       UInt :$timeout= 10,
                       :$format is copy = Whatever,
                       Str :$method = 'tiny',
