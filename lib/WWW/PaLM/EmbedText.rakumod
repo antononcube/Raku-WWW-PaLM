@@ -23,7 +23,7 @@ END
 #| PaLM completion access.
 our proto PaLMEmbedText($prompt is copy,
                         :$model is copy = Whatever,
-                        :$auth-key is copy = Whatever,
+                        :api-key(:$auth-key) is copy = Whatever,
                         UInt :$timeout= 10,
                         :$format is copy = Whatever,
                         Str :$method = 'tiny') is export {*}
@@ -36,7 +36,7 @@ multi sub PaLMEmbedText(@prompts, *%args) {
 #| PaLM completion access.
 multi sub PaLMEmbedText($prompt is copy,
                         :$model is copy = Whatever,
-                        :$auth-key is copy = Whatever,
+                        :api-key(:$auth-key) is copy = Whatever,
                         UInt :$timeout= 10,
                         :$format is copy = Whatever,
                         Str :$method = 'tiny') {

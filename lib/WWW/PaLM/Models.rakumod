@@ -77,7 +77,7 @@ multi sub palm-model-to-end-points(Str $model) {
 #============================================================
 
 #| PaLM models.
-our sub PaLMModels(:$auth-key is copy = Whatever, UInt :$timeout = 10) is export {
+our sub PaLMModels(:api-key(:$auth-key) is copy = Whatever, UInt :$timeout = 10) is export {
     #------------------------------------------------------
     # Process $auth-key
     #------------------------------------------------------

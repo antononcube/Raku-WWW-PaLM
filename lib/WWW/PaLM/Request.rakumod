@@ -13,7 +13,7 @@ proto sub tiny-post(Str :$url!, |) is export {*}
 
 multi sub tiny-post(Str :$url!,
                     Str :$body!,
-                    Str :$auth-key!,
+                    Str :api-key($auth-key)!,
                     UInt :$timeout = 10) {
     my $resp = HTTP::Tiny.post: $url ~ "?key={ %*ENV<PALM_API_KEY> // $auth-key }",
             headers => { Content-Type => "application/json" },
@@ -24,7 +24,7 @@ multi sub tiny-post(Str :$url!,
 
 multi sub tiny-post(Str :$url!,
                     :$body! where *~~ Map,
-                    Str :$auth-key!,
+                    Str :api-key($auth-key)!,
                     Bool :$json = False,
                     UInt :$timeout = 10) {
     if $json {
@@ -46,7 +46,7 @@ curl $URL?key=$PALM_API_KEY \
     -d '$BODY'
 END
 
-multi sub curl-post(Str :$url!, Str :$body!, Str :$auth-key!, UInt :$timeout = 10) {
+multi sub curl-post(Str :$url!, Str :$body!, Str :api-key($auth-key)!, UInt :$timeout = 10) {
 
     my $textQuery = $curlQuery
             .subst('$URL', $url)
@@ -67,7 +67,7 @@ END
 
 multi sub curl-post(Str :$url!,
                     :$body! where *~~ Map,
-                    Str :$auth-key!,
+                    Str :api-key($auth-key)!,
                     UInt :$timeout = 10) {
 
     my $textQuery = $curlFormQuery
@@ -95,7 +95,7 @@ multi sub curl-post(Str :$url!,
 #| PaLM request access.
 our proto palm-request(Str :$url!,
                        :$body!,
-                       :$auth-key is copy = Whatever,
+                       :api-key(:$auth-key) is copy = Whatever,
                        UInt :$timeout= 10,
                        :$format is copy = Whatever,
                        Str :$method = 'tiny',
@@ -104,7 +104,7 @@ our proto palm-request(Str :$url!,
 #| PaLM request access.
 multi sub palm-request(Str :$url!,
                        :$body!,
-                       :$auth-key is copy = Whatever,
+                       :api-key(:$auth-key) is copy = Whatever,
                        UInt :$timeout= 10,
                        :$format is copy = Whatever,
                        Str :$method = 'tiny'
