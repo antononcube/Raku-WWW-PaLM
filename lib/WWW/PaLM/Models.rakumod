@@ -1,5 +1,3 @@
-use v6.d;
-
 use HTTP::Tiny;
 use JSON::Fast;
 

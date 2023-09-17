@@ -1,5 +1,3 @@
-use v6.d;
-
 use WWW::PaLM::Models;
 use WWW::PaLM::Request;
 use JSON::Fast;
