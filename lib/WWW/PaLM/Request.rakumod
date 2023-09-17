@@ -170,6 +170,10 @@ multi sub palm-request(Str :$url!,
         }
     }
 
+    if $res ~~ Map && $res<error> {
+        fail $res;
+    }
+
     return do given $format.lc {
         when $_ eq 'values' {
             if ($res<candidates>:exists) && ($res<messages>:exists) {
